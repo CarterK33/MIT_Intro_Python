@@ -4,6 +4,33 @@ import random
 def is_Vowel(char):
     return char.lower() in 'aeiou'
 
+def match_with_gaps(my_word, other_word): 
+    check = False
+    if len(my_word) != len(other_word): 
+        return False
+    for i in range(len(my_word.strip())): 
+        if my_word[i] != "_": 
+            if my_word[i] == other_word[i]: 
+                check = True 
+            else: 
+                return False
+        else: 
+            pass
+    return check
+
+def show_possible_matches(my_word, contents):
+    possible_matches = []
+    check_word = False
+
+    for list_word in contents: 
+        if match_with_gaps(my_word,list_word): 
+            possible_matches.append(list_word)
+
+    return possible_matches
+            
+
+
+
 def count_letters_unique_word(secret_word): 
     unique_chars_word = "".join(set(secret_word))
     return len(unique_chars_word)
@@ -55,7 +82,7 @@ def main():
 
     rand_num = random.randint(0, 5000)
     secret_word = contents[rand_num]
-
+    
     print("Welcome to Hangman")  
     print(f"I am thinking of a word that is {len(secret_word)} letters long")
     print(f"You have {user_warnings} warnings left.")
@@ -66,39 +93,44 @@ def main():
         print(f"Available letters: {get_available_letters(letter_guess_list)}")
         
         char_guess = input("Please guess a letter: ")
-        
-        if char_guess.islower() and char_guess.isalpha() and (char_guess not in letter_guess_list):
-            letter_guess_list.append(char_guess)
 
-            if char_guess in secret_word: 
-                print(f"Good Guess: {get_guessed_word(secret_word,letter_guess_list )}")
-                if is_word_guessed(secret_word, letter_guess_list):
-                    total_score = user_guesses * count_letters_unique_word(secret_word)
-                    print("Congratulations, you won!")
-                    print(f"Your total score for this game is: {total_score}")
-                    break 
-            else:
-                if is_Vowel(char_guess):
-                    user_guesses-=2
-                    print(f"Oops! That letter is not in my word: {get_guessed_word(secret_word, letter_guess_list)}") 
+        if char_guess == "*": 
+            print("Possible Word matches are: ")
+            print(show_possible_matches(get_guessed_word(secret_word,letter_guess_list), contents))
+
+        else: 
+            if char_guess.islower() and char_guess.isalpha() and (char_guess not in letter_guess_list):
+                letter_guess_list.append(char_guess)
+
+                if char_guess in secret_word: 
+                    print(f"Good Guess: {get_guessed_word(secret_word,letter_guess_list )}")
+                    if is_word_guessed(secret_word, letter_guess_list):
+                        total_score = user_guesses * count_letters_unique_word(secret_word)
+                        print("Congratulations, you won!")
+                        print(f"Your total score for this game is: {total_score}")
+                        break 
+                else:
+                    if is_Vowel(char_guess):
+                        user_guesses-=2
+                        print(f"Oops! That letter is not in my word: {get_guessed_word(secret_word, letter_guess_list)}") 
+                    else: 
+                        user_guesses-=1
+                        print(f"Oops! That letter is not in my word: {get_guessed_word(secret_word, letter_guess_list)}")
+            
+            elif char_guess.islower() and char_guess.isalpha() and (char_guess in letter_guess_list):
+                if user_warnings <= 0: 
+                    user_guesses-=1 
+                    print(f"Oops! You've already guessed that letter. you have {user_warnings} warnings left: {get_guessed_word(secret_word, letter_guess_list)}")
                 else: 
+                    user_warnings-=1    
+                    print(f"Oops! You've already guessed that letter. you have {user_warnings} warnings left: {get_guessed_word(secret_word, letter_guess_list)}")
+            else:
+                if user_warnings <= 0:
                     user_guesses-=1
-                    print(f"Oops! That letter is not in my word: {get_guessed_word(secret_word, letter_guess_list)}")
-        
-        elif char_guess.islower() and char_guess.isalpha() and (char_guess in letter_guess_list):
-            if user_warnings <= 0: 
-                user_guesses-=1 
-                print(f"Oops! You've already guessed that letter. you have {user_warnings} warnings left: {get_guessed_word(secret_word, letter_guess_list)}")
-            else: 
-                user_warnings-=1    
-                print(f"Oops! You've already guessed that letter. you have {user_warnings} warnings left: {get_guessed_word(secret_word, letter_guess_list)}")
-        else:
-            if user_warnings <= 0:
-                user_guesses-=1
-                print(f"Oops! That is not a valid letter. You have {user_warnings} warnings left: {get_guessed_word(secret_word,letter_guess_list)}")
-            else    
-                user_warnings-=1
-                print(f"Oops! That is not a valid letter. You have {user_warnings} warnings left: {get_guessed_word(secret_word,letter_guess_list)}")
+                    print(f"Oops! That is not a valid letter. You have {user_warnings} warnings left: {get_guessed_word(secret_word,letter_guess_list)}")
+                else:    
+                    user_warnings-=1
+                    print(f"Oops! That is not a valid letter. You have {user_warnings} warnings left: {get_guessed_word(secret_word,letter_guess_list)}")
 
         
         
