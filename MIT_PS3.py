@@ -140,13 +140,14 @@ def deal_hand(n):
 #
 def update_hand(hand, word):
     
-    new_hand = hand.copy() 
+    word = word.lower()
+    new_hand = hand.copy()
 
     for char in word: 
         if char in new_hand.keys():
             new_hand[char]-=1 
-        if new_hand[char] == 0:  
-            del new_hand[char] 
+        if new_hand[char] == 0: 
+            del new_hand[char]
 
     return new_hand
 
