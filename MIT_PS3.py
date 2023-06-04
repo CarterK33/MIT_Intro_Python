@@ -236,7 +236,7 @@ def play_hand(hand, word_list):
             print("This is not a valid word. Please choose another word.")
 
     
-    print(f"Ran out of letters. Total score: {total_score}")
+    print(f"Ran out of letters. Total score for hand: {total_score}")
     print(" ")
     return total_score
 
@@ -302,6 +302,9 @@ def play_game(word_list):
             num_of_hands-=1
             print("----")
             hand_redo = input("Would you like to replay this hand? ")
+
+        elif change_letter_input != None:
+            break
         
         
         change_letter_input = None #only needed for first iteration
