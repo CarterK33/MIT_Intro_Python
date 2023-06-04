@@ -304,6 +304,7 @@ def play_game(word_list):
             hand_redo = input("Would you like to replay this hand? ")
 
         elif change_letter_input != None:
+            print("Wrong Input, Start Game Again!!")
             break
         
         
